@@ -1,0 +1,960 @@
+
+from faker import Faker
+from faker_education import SchoolProvider
+from random import randint
+from random import choice
+from datetime import timedelta
+
+fake = Faker()
+# Add the education provider to Faker
+fake.add_provider(SchoolProvider)
+
+# Section 1
+first_name = fake.first_name()
+middle_name = fake.first_name()
+last_name = fake.last_name()
+
+print("Section 1 - Personal Information")
+print(f"Name: {last_name}, {first_name} {middle_name}")
+
+
+date_of_birth = fake.date_of_birth(minimum_age=18, maximum_age=65)
+print("Section 2 - Date of Birth")
+print(f"Date of Birth: {date_of_birth}")
+
+
+city_of_birth = fake.city()
+state_of_birth = fake.state()
+country_of_birth = fake.country()
+
+print("Section 3 - Place of Birth")
+print(f"City: {city_of_birth}")
+print(f"State: {state_of_birth}")
+print(f"Country: {country_of_birth}")
+
+# Section 4 - Social Security Number
+print("Section 4 - Social Security Number, FLAGGED FOR HUMAN REVIEW")
+print("Section 5 - Other Names Used, FLAGGED FOR HUMAN REVIEW")
+
+# Section 6 - Physical Identifiers
+height_feet = fake.random_int(min=5, max=6)
+height_inches = fake.random_int(min=0, max=11)
+weight = fake.random_int(min=100, max=300)
+
+# Standard hair and eye colors
+standard_hair_colors = ["Black", "Brown", "Blonde", "Red", "Gray", "White"]
+standard_eye_colors = ["Brown", "Blue", "Green", "Hazel", "Gray"]
+
+hair_color = fake.random_element(elements=standard_hair_colors)
+eye_color = fake.random_element(elements=standard_eye_colors)
+
+# Print the physical identifiers
+print("Section 6 - Physical Identifiers")
+print(f"Height: {height_feet}' {height_inches}\"")
+print(f"Weight: {weight} lbs")
+print(f"Hair Color: {hair_color}")
+print(f"Eye Color: {eye_color}")
+
+print("Section 7 - Your Contact Information, FLAGGED FOR HUMAN REVIEW")
+print("Section 8 - U.S. Passport Information, FLAGGED FOR HUMAN REVIEW")
+print("Section 9, Section 10 - Citizenship, FLAGGED FOR HUMAN REVIEW")
+
+print("Section 11 - Where You Have Lived")
+
+for i in range(3):
+    street_address = fake.street_address()
+    city = fake.city()
+    state = fake.state()
+    country = fake.country()
+    zip_code = fake.zipcode()
+
+    # Generating start date
+    start_date = fake.date_this_decade()
+    
+    # Ensure that the end date is after the start date by using date_between
+    end_date = fake.date_between(start_date=start_date, end_date='+3y')
+
+    print(f"Residence {i+1}:")
+    print(f"Street: {street_address}")
+    print(f"City: {city}")
+    print(f"State: {state}")
+    print(f"Country: {country}")
+    print(f"Zip Code: {zip_code}")
+    print(f"Dates of Residence: {start_date} to {end_date}")
+    
+print("Section 12 - Where You Went to School")
+
+for i in range(3):
+    school_name = fake.school_name()
+    degree = fake.random_element(elements=('High School Diploma', 'Bachelors', 'Masters', 'Doctorate'))
+    field_of_study = fake.job()  
+    start_date = fake.date_this_century()
+    end_date = fake.date_between(start_date=start_date, end_date='+5y')
+    city = fake.city()
+    state = fake.state()
+    country = fake.country()
+
+    print(f"School {i+1}:")
+    print(f"Name: {school_name}")
+    print(f"Degree: {degree}")
+    print(f"Field of Study: {field_of_study}")
+    print(f"Start Date: {start_date}")
+    print(f"End Date: {end_date}")
+    print(f"Location: {city}, {state}, {country}")
+    
+    
+print("Section 13A - Employment Activities")
+for i in range(3):
+    company_name = fake.company()
+    job_title = fake.job()
+    start_date = fake.date_this_decade()
+    end_date = fake.date_between(start_date=start_date, end_date='+5y')
+    supervisor_name = fake.name()
+    supervisor_phone = fake.phone_number()
+    company_address = fake.address()
+
+    print(f"Employment {i+1}:")
+    print(f"Company: {company_name}")
+    print(f"Job Title: {job_title}")
+    print(f"Start Date: {start_date}")
+    print(f"End Date: {end_date}")
+    print(f"Supervisor: {supervisor_name}")
+    print(f"Supervisor Phone: {supervisor_phone}")
+    print(f"Company Address: {company_address}")
+
+print("Section 14 - Selective Service Record, FLAGGED FOR HUMAN REVIEW")
+
+
+print("Section 15 - Military History")
+
+for i in range(1):
+    service_branch = fake.random_element(elements=('Army', 'Navy', 'Air Force', 'Marines', 'Coast Guard', 'Space Force'))
+    
+    # Enlisted ranks for E1 to E8, specific to each branch
+    rank_dict = {
+        'Army': ['Private (E1)', 'Private (E2)', 'Private First Class (E3)', 'Specialist (E4)', 'Sergeant (E5)', 'Staff Sergeant (E6)', 'Sergeant First Class (E7)', 'Master Sergeant (E8)'],
+        'Navy': ['Seaman Recruit (E1)', 'Seaman Apprentice (E2)', 'Seaman (E3)', 'Petty Officer Third Class (E4)', 'Petty Officer Second Class (E5)', 'Petty Officer First Class (E6)', 'Chief Petty Officer (E7)', 'Senior Chief Petty Officer (E8)'],
+        'Air Force': ['Airman Basic (E1)', 'Airman (E2)', 'Airman First Class (E3)', 'Senior Airman (E4)', 'Staff Sergeant (E5)', 'Technical Sergeant (E6)', 'Master Sergeant (E7)', 'Senior Master Sergeant (E8)'],
+        'Marines': ['Private (E1)', 'Private First Class (E2)', 'Lance Corporal (E3)', 'Corporal (E4)', 'Sergeant (E5)', 'Staff Sergeant (E6)', 'Gunnery Sergeant (E7)', 'Master Sergeant (E8)'],
+        'Coast Guard': ['Seaman Recruit (E1)', 'Seaman Apprentice (E2)', 'Seaman (E3)', 'Petty Officer Third Class (E4)', 'Petty Officer Second Class (E5)', 'Petty Officer First Class (E6)', 'Chief Petty Officer (E7)', 'Senior Chief Petty Officer (E8)'],
+        'Space Force': ['Specialist 1 (E1)', 'Specialist 2 (E2)', 'Specialist 3 (E3)', 'Specialist 4 (E4)', 'Sergeant (E5)', 'Technical Sergeant (E6)', 'Master Sergeant (E7)', 'Senior Master Sergeant (E8)']
+    }
+    
+    # Select rank based on service branch
+    rank = fake.random_element(elements=rank_dict[service_branch])
+    
+    duty_station = fake.city() + " Base"
+    start_date = fake.date_this_century()
+    end_date = fake.date_between(start_date=start_date, end_date='+5y')  # Ensure end date is after start date
+    supervisor_name = fake.name()
+    supervisor_rank = fake.random_element(elements=('Lieutenant', 'Captain', 'Major', 'Colonel'))
+    supervisor_phone = fake.phone_number()
+
+    # Discharge type
+    discharge_type = fake.random_element(elements=('Honorable', 
+                                                   'Under Other than Honorable Conditions', 
+                                                   'Dishonorable', 
+                                                   'General', 
+                                                   'Bad Conduct', 
+                                                    ))
+
+    print(f"Military Assignment {i+1}:")
+    print(f"Service Branch: {service_branch}")
+    print(f"Rank: {rank}")
+    print(f"Duty Station: {duty_station}")
+    print(f"Start Date: {start_date}")
+    print(f"End Date: {end_date}")
+    print(f"Supervisor: {supervisor_name}, {supervisor_rank}")
+    print(f"Supervisor Phone: {supervisor_phone}")
+    print(f"Type of Discharge: {discharge_type}")
+
+print("Section 16 - People Who Know You Well")
+
+for i in range(3):  # Generating three entries
+    first_name = fake.first_name()
+    middle_name = fake.first_name()
+    last_name = fake.last_name()
+    suffix = fake.random_element(elements=('Jr.', 'Sr.', 'III', ''))
+    
+    # Dates known, ensuring coverage over the last seven years
+    from_date = fake.date_between(start_date='-10y', end_date='-7y')
+    to_date = fake.random_element(elements=('Present', fake.date_between(start_date=from_date, end_date='today')))
+    
+    # Relationship
+    relationship = fake.random_element(elements=('Neighbor', 'Work associate', 'Friend', 'Schoolmate', 'Other (Provide explanation)'))
+    if relationship == "Other (Provide explanation)":
+        explanation = fake.sentence(nb_words=5)  # Short explanation for "Other" relationship
+    else:
+        explanation = ""
+
+    email = fake.email()
+    rank_title = fake.random_element(elements=('Mr.', 'Ms.', 'Dr.', 'Professor', ''))
+    
+    # Phone numbers
+    phone_number_day = fake.phone_number()
+    phone_number_night = fake.phone_number()
+    mobile_number = fake.phone_number()
+    
+    # Address (U.S. location)
+    street = fake.street_address()
+    city = fake.city()
+    state = fake.state_abbr()
+    zip_code = fake.zipcode()
+    country = "USA"
+
+    # Print generated data
+    print(f"Entry #{i+1}")
+    print("Provide dates known:")
+    print(f"  From Date (Month/Year): {from_date.strftime('%m/%Y')}")
+    print(f"  To Date (Month/Year): {to_date}")
+    print("Provide full name:")
+    print(f"  Last name: {last_name}")
+    print(f"  First name: {first_name}")
+    print(f"  Middle name: {middle_name}")
+    print(f"  Suffix: {suffix}")
+    print(f"Relationship: {relationship} {explanation}")
+    print(f"Provide e-mail address: {email}")
+    print(f"Provide rank/title: {rank_title}")
+    print("Provide telephone number:")
+    print(f"  Day: {phone_number_day}")
+    print(f"  Night: {phone_number_night}")
+    print(f"Provide mobile/cell phone number: {mobile_number}")
+    print("Provide home or work address:")
+    print(f"  Street: {street}")
+    print(f"  City: {city}")
+    print(f"  State: {state}")
+    print(f"  Zip Code: {zip_code}")
+    print(f"  Country: {country}")
+    
+print("Section 17 - Marital/Relationship Status")
+
+# Randomly select marital status
+marital_status = fake.random_element(elements=(
+    'Never entered in a civil marriage, legally recognized civil union, or legally recognized domestic partnership',
+    'Currently in a civil marriage, legally recognized civil union, or legally recognized domestic partnership',
+    'Separated',
+    'Annulled',
+    'Divorced/Dissolved',
+    'Widowed'
+))
+
+print(f"Marital Status: {marital_status}")
+
+# If currently married, in a recognized partnership, or separated, generate spouse/partner details
+if marital_status in [
+    'Currently in a civil marriage, legally recognized civil union, or legally recognized domestic partnership',
+    'Separated'
+]:
+    spouse_first_name = fake.first_name()
+    spouse_middle_name = fake.first_name()
+    spouse_last_name = fake.last_name()
+    spouse_suffix = fake.random_element(elements=('Jr.', 'Sr.', 'III', ''))
+    
+    spouse_dob = fake.date_of_birth(minimum_age=18, maximum_age=100)
+    
+    # Spouse's place of birth
+    spouse_birth_city = fake.city()
+    spouse_birth_county = fake.city() + " County"  # Faker does not directly support counties, so using city
+    spouse_birth_state = fake.state()
+    spouse_birth_country = fake.country()
+
+    print("\nSpouse/Partner Information:")
+    print(f"  Full Name: {spouse_last_name}, {spouse_first_name} {spouse_middle_name} {spouse_suffix}")
+    print(f"  Date of Birth: {spouse_dob.strftime('%m/%d/%Y')}")
+    print("  Place of Birth:")
+    print(f"    City: {spouse_birth_city}")
+    print(f"    County: {spouse_birth_county}")
+    print(f"    State: {spouse_birth_state}")
+    print(f"    Country: {spouse_birth_country}")
+
+# If annulled, divorced/dissolved, or widowed, generate former spouse/partner details
+elif marital_status in [
+    'Annulled',
+    'Divorced/Dissolved',
+    'Widowed'
+]:
+    former_spouse_first_name = fake.first_name()
+    former_spouse_middle_name = fake.first_name()
+    former_spouse_last_name = fake.last_name()
+    former_spouse_suffix = fake.random_element(elements=('Jr.', 'Sr.', 'III', ''))
+
+    former_spouse_dob = fake.date_of_birth(minimum_age=18, maximum_age=100)
+    
+    # Former spouse's place of birth
+    former_spouse_birth_city = fake.city()
+    former_spouse_birth_county = fake.city() + " County"
+    former_spouse_birth_state = fake.state()
+    former_spouse_birth_country = fake.country()
+
+    print("\nFormer Spouse/Partner Information:")
+    print(f"  Full Name: {former_spouse_last_name}, {former_spouse_first_name} {former_spouse_middle_name} {former_spouse_suffix}")
+    print(f"  Date of Birth: {former_spouse_dob.strftime('%m/%d/%Y')}")
+    print("  Place of Birth:")
+    print(f"    City: {former_spouse_birth_city}")
+    print(f"    County: {former_spouse_birth_county}")
+    print(f"    State: {former_spouse_birth_state}")
+    print(f"    Country: {former_spouse_birth_country}")
+    
+    
+print("Section 18 - Relatives")
+
+# List of relative types to select from
+relative_types = [
+    'Mother', 'Father', 'Foster parent', 'Stepmother', 'Stepfather', 'Child', 'Stepchild',
+    'Brother', 'Sister', 'Stepbrother', 'Stepsister', 'Half-brother', 'Half-sister', 
+    'Father-in-law', 'Mother-in-law', 'Guardian'
+]
+
+for i in range(3):  # Generate details for three relatives as an example
+    relative_type = fake.random_element(elements=relative_types)
+    relative_first_name = fake.first_name()
+    relative_middle_name = fake.first_name()
+    relative_last_name = fake.last_name()
+    relative_suffix = fake.random_element(elements=('Jr.', 'Sr.', 'III', ''))
+
+    # Date of birth for the relative
+    relative_dob = fake.date_of_birth(minimum_age=0, maximum_age=100)
+    
+    # Place of birth
+    relative_birth_city = fake.city()
+    relative_birth_state = fake.state()
+    relative_birth_country = fake.country()
+    
+    # Country(ies) of citizenship
+    citizenship_1 = relative_birth_country
+    citizenship_2 = fake.random_element(elements=(citizenship_1, fake.country()))
+
+    print(f"Entry #{i+1}")
+    print(f"Relative type: {relative_type}")
+    print(f"Full Name: {relative_last_name}, {relative_first_name} {relative_middle_name} {relative_suffix}")
+    print(f"Date of Birth: {relative_dob.strftime('%m/%d/%Y')}")
+    print("Place of Birth:")
+    print(f"  City: {relative_birth_city}")
+    print(f"  State: {relative_birth_state}")
+    print(f"  Country: {relative_birth_country}")
+    print(f"Citizenship(s): {citizenship_1}, {citizenship_2}")
+
+    # If the relative is a mother, check for maiden name
+    if relative_type == 'Mother':
+        maiden_name = fake.last_name()
+        print(f"Mother's Maiden Name: {maiden_name}")
+
+    # Check if this relative used any other names
+    has_other_names = fake.random_element(elements=('YES', 'NO'))
+    if has_other_names == 'YES':
+        print("Has this relative used any other names: YES")
+        # Generate other names used
+        for j in range(2):  # Example: up to 2 other names
+            other_last_name = fake.last_name()
+            other_first_name = fake.first_name()
+            is_maiden = fake.random_element(elements=('YES', 'NO'))
+            from_date = fake.date_between(start_date='-30y', end_date='-10y')
+            to_date = fake.random_element(elements=(fake.date_between(start_date=from_date, end_date='today'), 'Present'))
+
+            print(f"  Other Name #{j+1}:")
+            print(f"    Last Name: {other_last_name}")
+            print(f"    First Name: {other_first_name}")
+            print(f"    Maiden name? {is_maiden}")
+            print(f"    From (Month/Year): {from_date.strftime('%m/%Y')}")
+            print(f"    To (Month/Year): {to_date}")
+    else:
+        print("Has this relative used any other names: NO")
+        
+print("Section 19 - Foreign Contacts")
+
+# Simulate if the applicant has had a foreign contact within the last 7 years
+has_foreign_contact = fake.random_element(elements=('YES', 'NO'))
+
+print(f"Do you have, or have you had, close and/or continuing contact with a foreign national within the last seven (7) years? {has_foreign_contact}")
+
+if has_foreign_contact == 'YES':
+    # Generate foreign contact details
+    foreign_first_name = fake.first_name()
+    foreign_middle_name = fake.first_name()
+    foreign_last_name = fake.last_name()
+    foreign_suffix = fake.random_element(elements=('Jr.', 'Sr.', 'III', ''))
+
+    # Date of first and last contact (ensuring they are within the last 7 years)
+    first_contact_date = fake.date_between(start_date='-7y', end_date='-3y')
+    last_contact_date = fake.date_between(start_date=first_contact_date, end_date='today')
+
+    # Method of contact
+    methods_of_contact = fake.random_elements(elements=(
+        'In person', 'Telephone', 'Electronic (e-mail, texting, chat rooms, etc.)',
+        'Written correspondence', 'Other'), length=fake.random_int(min=1, max=3), unique=True)
+    
+    frequency_of_contact = fake.random_element(elements=('Daily', 'Weekly', 'Monthly', 'Quarterly', 'Annually', 'Other (Provide explanation)'))
+
+    # Nature of relationship
+    relationship_nature = fake.random_elements(elements=(
+        'Professional or Business', 'Obligation (Provide explanation)',
+        'Personal (Such as family ties, friendship, affection, common interests, etc)',
+        'Other'), length=fake.random_int(min=1, max=2), unique=True)
+
+    # Nicknames and country of citizenship
+    other_name_first = fake.first_name()
+    other_name_last = fake.last_name()
+    citizenship_1 = fake.country()
+    citizenship_2 = fake.random_element(elements=(citizenship_1, fake.country()))
+
+    # Date of birth and place of birth
+    foreign_dob = fake.date_of_birth(minimum_age=18, maximum_age=80)
+    foreign_birth_city = fake.city()
+    foreign_birth_country = fake.country()
+
+    # Address
+    address = fake.address().split('\n')
+    address_city = fake.city()
+    address_country = fake.country()
+    address_zip = fake.zipcode()
+
+    # Employer information
+    employer_name = fake.company()
+    employer_address = fake.address().split('\n')
+
+    # Foreign government affiliation
+    gov_affiliation = fake.random_element(elements=('YES', 'NO', 'I don\'t know'))
+    if gov_affiliation == 'YES':
+        gov_description = fake.sentence(nb_words=8)
+    else:
+        gov_description = ''
+
+    # Output all the details
+    print("\nEntry #1")
+    print(f"Full Name: {foreign_last_name}, {foreign_first_name} {foreign_middle_name} {foreign_suffix}")
+    print(f"First Contact Date (Month/Year): {first_contact_date.strftime('%m/%Y')}")
+    print(f"Last Contact Date (Month/Year): {last_contact_date.strftime('%m/%Y')}")
+    print(f"Methods of Contact: {', '.join(methods_of_contact)}")
+    print(f"Frequency of Contact: {frequency_of_contact}")
+    print(f"Nature of Relationship: {', '.join(relationship_nature)}")
+    print("Other Names or Nicknames:")
+    print(f"  Last Name: {other_name_last}")
+    print(f"  First Name: {other_name_first}")
+    print(f"Country(ies) of Citizenship: {citizenship_1}, {citizenship_2}")
+    print(f"Date of Birth: {foreign_dob.strftime('%m/%d/%Y')}")
+    print("Place of Birth:")
+    print(f"  City: {foreign_birth_city}")
+    print(f"  Country: {foreign_birth_country}")
+    print("Current Address:")
+    print(f"  Street: {address[0]}")
+    print(f"  City: {address_city}")
+    print(f"  Country: {address_country}")
+    print(f"  Zip Code: {address_zip}")
+    print("Employer Information:")
+    print(f"  Employer Name: {employer_name}")
+    print(f"  Employer Address: {employer_address[0]}, {employer_address[1]}")
+    print(f"Affiliated with Foreign Government/Military/Security/Defense/Intelligence: {gov_affiliation}")
+    if gov_affiliation == 'YES':
+        print(f"  Description of Affiliation: {gov_description}")
+
+else:
+    print("No foreign contacts reported. Proceed to Section 20A.")
+    
+
+# Example data generation for Section 20A - Foreign Activities
+print("Section 20A - Foreign Activities")
+
+# Simulate if the applicant or related individuals have foreign financial interests
+has_foreign_financial_interest = fake.random_element(elements=('YES', 'NO'))
+
+print(f"Have you, your spouse, or legally recognized civil union/domestic partner, cohabitant, or dependent children EVER had any foreign financial interests? {has_foreign_financial_interest}")
+
+if has_foreign_financial_interest == 'YES':
+    # Generate ownership details
+    owner_type = fake.random_elements(elements=[
+        'Yourself', 
+        'Spouse or legally recognized civil union/domestic partner', 
+        'Cohabitant', 
+        'Dependent children'], 
+        length=fake.random_int(min=1, max=2), unique=True)
+    
+    # Type of financial interest
+    financial_interest_type = fake.random_element(elements=[
+        'Stocks', 'Property', 'Investments', 'Bank accounts', 'Corporate entities', 'Exchange Traded Funds (ETFs)'])
+    
+    # Acquisition details
+    acquisition_date = fake.date_between(start_date='-15y', end_date='-5y')
+    acquisition_method = fake.random_element(elements=['Purchase', 'Gift', 'Inheritance', 'Other'])
+    acquisition_cost = randint(1000, 1000000)  # Random cost in USD at time of acquisition
+    current_value = acquisition_cost * randint(1, 3)  # Assume some growth in value over time
+
+    # Disposition details
+    relinquished_date = fake.random_element(elements=(fake.date_between(start_date=acquisition_date, end_date='today'), 'Not Applicable'))
+    disposition_explanation = fake.sentence(nb_words=8) if relinquished_date != 'Not Applicable' else ""
+
+    # Co-ownership details
+    has_co_owner = fake.random_element(elements=('YES', 'NO'))
+    
+    print("\nEntry #1")
+    print("Ownership Type(s): " + ", ".join(owner_type))
+    print(f"Type of Financial Interest: {financial_interest_type}")
+    print(f"Date Acquired: {acquisition_date.strftime('%m/%d/%Y')}")
+    print(f"Method of Acquisition: {acquisition_method}")
+    print(f"Cost at Time of Acquisition: ${acquisition_cost:,.2f}")
+    print(f"Current Value: ${current_value:,.2f}")
+    print(f"Date Control or Ownership Relinquished: {relinquished_date}")
+    if disposition_explanation:
+        print(f"Explanation of Disposition: {disposition_explanation}")
+
+    # Co-owner information if applicable
+    if has_co_owner == 'YES':
+        print("\nCo-Ownership Details:")
+        for j in range(2):  # Example: up to 2 co-owners
+            co_owner_first_name = fake.first_name()
+            co_owner_middle_name = fake.first_name()
+            co_owner_last_name = fake.last_name()
+            co_owner_suffix = fake.random_element(elements=('Jr.', 'Sr.', 'III', ''))
+
+            co_owner_address_street = fake.street_address()
+            co_owner_address_city = fake.city()
+            co_owner_address_state = fake.state_abbr()
+            co_owner_address_zip = fake.zipcode()
+            co_owner_address_country = fake.country()
+
+            co_owner_citizenship_1 = co_owner_address_country
+            co_owner_citizenship_2 = fake.random_element(elements=(co_owner_citizenship_1, fake.country()))
+            relationship_to_co_owner = fake.random_element(elements=['Business Partner', 'Family Friend', 'Relative', 'Other'])
+
+            print(f"  Co-owner #{j+1}")
+            print(f"    Full Name: {co_owner_last_name}, {co_owner_first_name} {co_owner_middle_name} {co_owner_suffix}")
+            print(f"    Address: {co_owner_address_street}, {co_owner_address_city}, {co_owner_address_state}, {co_owner_address_country}, {co_owner_address_zip}")
+            print(f"    Country(ies) of Citizenship: {co_owner_citizenship_1}, {co_owner_citizenship_2}")
+            print(f"    Relationship to Co-owner: {relationship_to_co_owner}")
+else:
+    print("No foreign financial interests reported. Proceed to Section 20A.2.")
+
+
+print("Section 21A - Psychological and Emotional Health")
+
+# Simulate if the applicant has ever been declared mentally incompetent by a court or agency
+declared_incompetent = fake.random_element(elements=('YES', 'NO'))
+
+print(f"Has a court or administrative agency EVER issued an order declaring you mentally incompetent? {declared_incompetent}")
+
+if declared_incompetent == 'YES':
+    # Date of declaration
+    declaration_date = fake.date_between(start_date='-20y', end_date='-5y')
+    
+    # Court or administrative agency details
+    court_name = fake.company() + " Court"
+    court_street = fake.street_address()
+    court_city = fake.city()
+    court_state = fake.state_abbr()
+    court_zip = fake.zipcode()
+    court_country = "USA"
+
+    # Print the primary declaration details
+    print("\nEntry #1")
+    print(f"Date Declared (Month/Year): {declaration_date.strftime('%m/%Y')}")
+    print(f"Name of Court or Agency: {court_name}")
+    print("Address of Court or Agency:")
+    print(f"  Street: {court_street}")
+    print(f"  City: {court_city}")
+    print(f"  State: {court_state}")
+    print(f"  Zip Code: {court_zip}")
+    print(f"  Country: {court_country}")
+
+    # Was this matter appealed?
+    appealed = fake.random_element(elements=('YES', 'NO'))
+    print(f"Was this matter appealed to a higher court or administrative agency? {appealed}")
+
+    # If appealed, generate appeal information
+    if appealed == 'YES':
+        for i in range(2):  # Example: up to 2 appeals
+            appeal_court_name = fake.company() + " Appeals Court"
+            appeal_final_disposition = fake.random_element(elements=['Upheld', 'Overturned', 'Dismissed'])
+            appeal_street = fake.street_address()
+            appeal_city = fake.city()
+            appeal_state = fake.state_abbr()
+            appeal_zip = fake.zipcode()
+            appeal_country = "USA"
+
+            print(f"\nAppeal #{i+1}")
+            print(f"  Name of Court or Agency: {appeal_court_name}")
+            print(f"  Final Disposition: {appeal_final_disposition}")
+            print("  Address of Court or Agency:")
+            print(f"    Street: {appeal_street}")
+            print(f"    City: {appeal_city}")
+            print(f"    State: {appeal_state}")
+            print(f"    Zip Code: {appeal_zip}")
+            print(f"    Country: {appeal_country}")
+else:
+    print("No mental incompetency declaration reported. Proceed to Section 21B.")
+    
+# Section 21B - Court-Ordered Mental Health Consultation
+print("Section 21B - Psychological and Emotional Health - Court-Ordered Mental Health Consultation")
+court_ordered_consultation = fake.random_element(elements=('YES', 'NO'))
+
+print(f"Has a court or administrative agency EVER ordered you to consult with a mental health professional? {court_ordered_consultation}")
+
+if court_ordered_consultation == 'YES':
+    consultation_date = fake.date_between(start_date='-15y', end_date='-5y')
+    court_name = fake.company() + " Court"
+    court_street = fake.street_address()
+    court_city = fake.city()
+    court_state = fake.state_abbr()
+    court_zip = fake.zipcode()
+    court_country = "USA"
+    final_disposition = fake.sentence(nb_words=6)
+    appealed = fake.random_element(elements=('YES', 'NO'))
+
+    print("\nEntry #1")
+    print(f"Date of Order (Month/Year): {consultation_date.strftime('%m/%Y')}")
+    print(f"Court or Agency: {court_name}")
+    print("Address:")
+    print(f"  Street: {court_street}")
+    print(f"  City: {court_city}")
+    print(f"  State: {court_state}")
+    print(f"  Zip Code: {court_zip}")
+    print(f"  Country: {court_country}")
+    print(f"Final Disposition: {final_disposition}")
+    print(f"Was this matter appealed? {appealed}")
+
+    if appealed == 'YES':
+        for i in range(2):  # Example for up to 2 appeals
+            appeal_court_name = fake.company() + " Appeals Court"
+            appeal_disposition = fake.random_element(elements=['Upheld', 'Overturned', 'Dismissed'])
+            appeal_street = fake.street_address()
+            appeal_city = fake.city()
+            appeal_state = fake.state_abbr()
+            appeal_zip = fake.zipcode()
+
+            print(f"\nAppeal #{i+1}")
+            print(f"  Court or Agency: {appeal_court_name}")
+            print(f"  Disposition: {appeal_disposition}")
+            print("  Address:")
+            print(f"    Street: {appeal_street}")
+            print(f"    City: {appeal_city}")
+            print(f"    State: {appeal_state}")
+            print(f"    Zip Code: {appeal_zip}")
+
+# Section 21C - Hospitalization for Mental Health Condition
+print("\nSection 21C - Psychological and Emotional Health - Hospitalization for Mental Health Condition")
+hospitalized = fake.random_element(elements=('YES', 'NO'))
+
+print(f"Have you EVER been hospitalized for a mental health condition? {hospitalized}")
+
+if hospitalized == 'YES':
+    for i in range(3):  # Generate up to 3 hospitalization entries
+        admission_type = fake.random_element(elements=['Voluntary', 'Involuntary'])
+        explanation = fake.sentence(nb_words=6)
+        from_date = fake.date_between(start_date='-10y', end_date='-5y')
+        to_date = fake.date_between(start_date=from_date, end_date='today')
+        facility_name = fake.company() + " Mental Health Center"
+        facility_street = fake.street_address()
+        facility_city = fake.city()
+        facility_state = fake.state_abbr()
+        facility_zip = fake.zipcode()
+        facility_country = "USA"
+
+        print(f"\nEntry #{i+1}")
+        print(f"Admission Type: {admission_type}")
+        print(f"Explanation: {explanation}")
+        print(f"Dates of Treatment: From {from_date.strftime('%m/%Y')} to {to_date.strftime('%m/%Y')}")
+        print(f"Facility: {facility_name}")
+        print("Address:")
+        print(f"  Street: {facility_street}")
+        print(f"  City: {facility_city}")
+        print(f"  State: {facility_state}")
+        print(f"  Zip Code: {facility_zip}")
+        print(f"  Country: {facility_country}")
+
+# Section 21D - Diagnosis with Specific Mental Health Disorders
+print("\nSection 21D - Psychological and Emotional Health - Diagnosis of Specific Mental Health Disorders")
+diagnosed = fake.random_element(elements=('YES', 'NO'))
+
+print(f"Have you EVER been diagnosed with a specific mental health condition? {diagnosed}")
+
+if diagnosed == 'YES':
+    for i in range(2):  # Generate up to 2 diagnoses
+        condition = fake.random_element(elements=[
+            'Psychotic Disorder', 'Schizophrenia', 'Bipolar Mood Disorder', 
+            'Borderline Personality Disorder', 'Antisocial Personality Disorder'])
+        diagnosis_from_date = fake.date_between(start_date='-15y', end_date='-10y')
+        diagnosis_to_date = fake.random_element(elements=(fake.date_between(start_date=diagnosis_from_date, end_date='today'), 'Present'))
+        professional_name = fake.name()
+        professional_phone = fake.phone_number()
+        professional_street = fake.street_address()
+        professional_city = fake.city()
+        professional_state = fake.state_abbr()
+        professional_zip = fake.zipcode()
+        facility_name = fake.company() + " Health Clinic"
+        treatment_effective = fake.random_element(elements=('YES', 'NO'))
+        effectiveness_explanation = fake.sentence(nb_words=6) if treatment_effective == 'NO' else ""
+
+        print(f"\nEntry #{i+1}")
+        print(f"Condition: {condition}")
+        print(f"Dates of Diagnosis: From {diagnosis_from_date.strftime('%m/%Y')} to {diagnosis_to_date}")
+        print(f"Health Care Professional: {professional_name}")
+        print(f"Phone: {professional_phone}")
+        print("Professional Address:")
+        print(f"  Street: {professional_street}")
+        print(f"  City: {professional_city}")
+        print(f"  State: {professional_state}")
+        print(f"  Zip Code: {professional_zip}")
+        print(f"Facility: {facility_name}")
+        print(f"Was treatment effective? {treatment_effective}")
+        if treatment_effective == 'NO':
+            print(f"Explanation: {effectiveness_explanation}")
+
+# Section 21E - Ongoing Mental Health Condition Affecting Judgment
+print("\nSection 21E - Psychological and Emotional Health - Ongoing Condition Affecting Judgment")
+affects_judgment = fake.random_element(elements=('YES', 'NO'))
+
+print(f"Do you have a mental health condition that adversely affects your judgment? {affects_judgment}")
+
+if affects_judgment == 'YES':
+    receiving_treatment = fake.random_element(elements=('YES', 'NO'))
+    print(f"Are you receiving counseling/treatment? {receiving_treatment}")
+
+    if receiving_treatment == 'YES':
+        for i in range(2):  # Example for up to 2 ongoing treatments
+            treatment_from_date = fake.date_between(start_date='-3y', end_date='-1y')
+            treatment_to_date = fake.random_element(elements=(fake.date_between(start_date=treatment_from_date, end_date='today'), 'Present'))
+            healthcare_name = fake.name()
+            healthcare_phone = fake.phone_number()
+            healthcare_street = fake.street_address()
+            healthcare_city = fake.city()
+            healthcare_state = fake.state_abbr()
+            healthcare_zip = fake.zipcode()
+            facility_name = fake.company() + " Clinic"
+
+            print(f"\nTreatment Entry #{i+1}")
+            print(f"Dates of Counseling/Treatment: From {treatment_from_date.strftime('%m/%Y')} to {treatment_to_date}")
+            print(f"Health Care Professional: {healthcare_name}")
+            print(f"Phone: {healthcare_phone}")
+            print("Professional Address:")
+            print(f"  Street: {healthcare_street}")
+            print(f"  City: {healthcare_city}")
+            print(f"  State: {healthcare_state}")
+            print(f"  Zip Code: {healthcare_zip}")
+            print(f"Facility: {facility_name}")
+            
+print("Section 22 - Police Record")
+
+has_offense = fake.random_element(elements=('YES', 'NO'))
+print(f"Have any of the listed offenses occurred in the last seven years? {has_offense}")
+
+
+
+if has_offense == 'YES':
+    for i in range(2):  # Generate up to 2 offense entries
+        offense_date = fake.date_between(start_date='-7y', end_date='today')
+        offense_description = fake.sentence(nb_words=8)
+        
+        # Offense Involvement details
+        involves_domestic_violence = fake.random_element(elements=('YES', 'NO'))
+        involves_firearms = fake.random_element(elements=('YES', 'NO'))
+        involves_alcohol_or_drugs = fake.random_element(elements=('YES', 'NO'))
+        
+        # Offense location details
+        offense_city = fake.city()
+        offense_state = fake.state_abbr()
+        offense_country = "USA"
+        offense_county = fake.city() + " County"
+        offense_zip = fake.zipcode()
+        
+        print(f"\nEntry #{i+1}")
+        print(f"Date of Offense: {offense_date.strftime('%m/%Y')}")
+        print(f"Description of Offense: {offense_description}")
+        print(f"Domestic Violence Involved? {involves_domestic_violence}")
+        print(f"Firearms Involved? {involves_firearms}")
+        print(f"Alcohol or Drugs Involved? {involves_alcohol_or_drugs}")
+        print("Location of Offense:")
+        print(f"  City: {offense_city}")
+        print(f"  State: {offense_state}")
+        print(f"  Country: {offense_country}")
+        print(f"  County: {offense_county}")
+        print(f"  Zip Code: {offense_zip}")
+        
+        # Arrest information
+        arrested = fake.random_element(elements=('YES', 'NO'))
+        print(f"Were you arrested? {arrested}")
+        if arrested == 'YES':
+            law_enforcement_agency = fake.company() + " Police Department"
+            agency_city = fake.city()
+            agency_state = fake.state_abbr()
+            agency_zip = fake.zipcode()
+            print(f"Law Enforcement Agency: {law_enforcement_agency}")
+            print("Agency Location:")
+            print(f"  City: {agency_city}")
+            print(f"  State: {agency_state}")
+            print(f"  Zip Code: {agency_zip}")
+        
+        # Court and charge information
+        charged = fake.random_element(elements=('YES', 'NO'))
+        print(f"Were you charged, convicted, or awaiting trial? {charged}")
+        if charged == 'YES':
+            court_name = fake.company() + " Court"
+            court_city = fake.city()
+            court_state = fake.state_abbr()
+            court_zip = fake.zipcode()
+            charge_type = fake.random_element(elements=['Felony', 'Misdemeanor'])
+            charge_outcome = fake.random_element(elements=['Found Guilty', 'Found Not Guilty', 'Charge Dropped', 'Lesser Offense'])
+            charge_date = fake.date_between(start_date=offense_date, end_date='today')
+            
+            print(f"Court: {court_name}")
+            print("Court Location:")
+            print(f"  City: {court_city}")
+            print(f"  State: {court_state}")
+            print(f"  Zip Code: {court_zip}")
+            print(f"Charge: {charge_type}")
+            print(f"Outcome: {charge_outcome}")
+          
+        
+        # Sentencing information
+        sentenced = fake.random_element(elements=('YES', 'NO'))
+        print(f"Were you sentenced for this offense? {sentenced}")
+        if sentenced == 'YES':
+            sentence_description = fake.sentence(nb_words=8)
+            imprisonment_exceed_1_year = fake.random_element(elements=('YES', 'NO'))
+            incarceration_duration = fake.random_element(elements=('YES', 'NO'))
+            probation_or_parole = fake.random_element(elements=('YES', 'NO'))
+            
+            print(f"Sentence Description: {sentence_description}")
+            print(f"Sentenced to Imprisonment Exceeding 1 Year? {imprisonment_exceed_1_year}")
+            print(f"Incarcerated for Not Less Than 1 Year? {incarceration_duration}")
+            
+            if imprisonment_exceed_1_year == 'YES':
+                from_date = fake.date_between(start_date=charge_date, end_date='today')
+                to_date = fake.date_between(start_date=from_date, end_date='today')
+                print(f"Incarceration Dates: From {from_date.strftime('%m/%Y')} to {to_date.strftime('%m/%Y')}")
+            
+            if probation_or_parole == 'YES':
+                probation_start = fake.date_between(start_date=charge_date, end_date='today')
+                probation_end = fake.date_between(start_date=probation_start, end_date='today')
+                print(f"Probation or Parole Dates: From {probation_start.strftime('%m/%Y')} to {probation_end.strftime('%m/%Y')}")
+        else:
+            awaiting_trial = fake.random_element(elements=('YES', 'NO'))
+            print(f"Currently Awaiting Trial or Sentencing? {awaiting_trial}")
+
+# Section 22.3 - Domestic Violence Protective Orders
+print("\nSection 22.3 - Domestic Violence Protective Orders")
+has_protective_order = fake.random_element(elements=('YES', 'NO'))
+print(f"Is there currently a domestic violence protective order issued against you? {has_protective_order}")
+
+if has_protective_order == 'YES':
+    for i in range(2):  # Example for up to 2 protective orders
+        order_explanation = fake.sentence(nb_words=8)
+        order_date = fake.date_between(start_date='-7y', end_date='today')
+        court_name = fake.company() + " Family Court"
+        court_city = fake.city()
+        court_state = fake.state_abbr()
+        court_zip = fake.zipcode()
+        
+        print(f"\nOrder Entry #{i+1}")
+        print(f"Explanation: {order_explanation}")
+        print(f"Date of Order: {order_date.strftime('%m/%Y')}")
+        print(f"Name of Court: {court_name}")
+        print("Location of Court:")
+        print(f"  City: {court_city}")
+        print(f"  State: {court_state}")
+        print(f"  Zip Code: {court_zip}")
+
+# Example data generation for Section 23 - Illegal Use of Drugs and Drug Activity
+print("Section 23 - Illegal Use of Drugs and Drug Activity")
+
+# Simulate if the applicant has sought counseling or treatment
+has_sought_treatment = fake.random_element(elements=('YES','NO'))
+
+print(f"Have you EVER voluntarily sought counseling or treatment as a result of your use of a drug or controlled substance? {has_sought_treatment}")
+
+if has_sought_treatment == 'YES':
+    # Generate drug type
+    drug_type = fake.random_element(elements=[
+        'Cocaine or crack cocaine (Such as rock, freebase, etc.)',
+        'THC (Such as marijuana, weed, pot, hashish, etc.)',
+        'Ketamine (Such as special K, jet, etc.)',
+        'Narcotics (Such as opium, morphine, codeine, heroin, etc.)',
+        'Stimulants (Such as amphetamines, speed, crystal meth, ecstasy, etc.)',
+        'Depressants (Such as barbiturates, methaqualone, tranquilizers, etc.)',
+        'Hallucinogenic (Such as LSD, PCP, mushrooms, etc.)',
+        'Steroids (Such as the clear, juice, etc.)',
+        'Inhalants (Such as toluene, amyl nitrate, etc.)',
+        'Other (Provide explanation)'
+    ])
+
+    # If "Other," generate a brief explanation
+    if drug_type == 'Other (Provide explanation)':
+        other_explanation = fake.sentence(nb_words=5)
+    else:
+        other_explanation = ""
+
+    # Treatment provider details
+    provider_first_name = fake.first_name()
+    provider_last_name = fake.last_name()
+    provider_street = fake.street_address()
+    provider_city = fake.city()
+    provider_state = fake.state_abbr()
+    provider_zip = fake.zipcode()
+    provider_country = "USA"
+    provider_phone_day = fake.phone_number()
+    provider_phone_night = fake.phone_number()
+
+    # Dates of treatment
+    from_date = fake.date_this_decade()
+    to_date = fake.random_element(elements=(fake.date_between(start_date=from_date, end_date="today"), "Present"))
+
+    # Success of treatment
+    treatment_completed = fake.random_element(elements=('YES', 'NO'))
+    if treatment_completed == 'NO':
+        completion_explanation = fake.sentence(nb_words=8)
+    else:
+        completion_explanation = ""
+
+    # Print generated data
+    print("\nEntry #1")
+    print(f"Type of Drug or Controlled Substance: {drug_type}")
+    if other_explanation:
+        print(f"Explanation for 'Other': {other_explanation}")
+    print("Treatment Provider Information:")
+    print(f"  Name: {provider_last_name}, {provider_first_name}")
+    print("  Address:")
+    print(f"    Street: {provider_street}")
+    print(f"    City: {provider_city}")
+    print(f"    State: {provider_state}")
+    print(f"    Zip Code: {provider_zip}")
+    print(f"    Country: {provider_country}")
+    print("Provide a telephone number for the treatment provider:")
+    print(f"  Day: {provider_phone_day}")
+    print(f"  Night: {provider_phone_night}")
+    print("Dates of Treatment:")
+    print(f"  From Date (Month/Year): {from_date.strftime('%m/%Y')}")
+    print(f"  To Date (Month/Year): {to_date}")
+    print(f"Did you successfully complete the treatment? {treatment_completed}")
+    if treatment_completed == 'NO':
+        print(f"  Explanation: {completion_explanation}")
+
+else:
+    print("No counseling or treatment sought. Proceed to Section 24.")
+    
+
+# Section 24 - Use of Alcohol
+alcohol_use = choice(["YES", "NO"])
+print("Section 24 - Use of Alcohol")
+print(f"Have you EVER consumed alcohol in a way that caused concern about your judgment, reliability, or trustworthiness? {alcohol_use}")
+if alcohol_use == "YES":
+    print("FLAGGED FOR HUMAN REVIEW")
+
+print()
+
+# Section 25 - Security Clearance Record
+clearance_revoked = choice(["YES", "NO"])
+print("Section 25 - Security Clearance Record")
+print(f"Has your security clearance EVER been revoked or denied? {clearance_revoked}")
+if clearance_revoked == "YES":
+    print("FLAGGED FOR HUMAN REVIEW")
+
+print()
+
+# Section 26 - Financial Record
+financial_record = choice(["YES", "NO"])
+print("Section 26 - Financial Record")
+print(f"Have you ever been evicted for nonpayment? {financial_record}")
+if clearance_revoked == "YES":
+    print("FLAGGED FOR HUMAN REVIEW")
+
+print()
+
+print("ALL OTHER SECTIONS FLAGGED FOR HUMAN REVIEW")
+#Some sections hardcoded as YES
