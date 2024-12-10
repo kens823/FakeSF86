@@ -4,4 +4,4 @@ Use in a Python environment.
 
 
 
-All generated information is based on public domain or unclassified data. Revisions and coding guidance were refined with external assistance, ChatGPT provided coding revision assistance as well.
+All generated information is based on public domain or unclassified data. ChatGPT provided coding revision/guidance assistance as well.
